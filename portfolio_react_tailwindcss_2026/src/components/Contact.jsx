@@ -87,7 +87,7 @@ const Contact = () => {
 
               <input
                 type="text"
-                name="user_name"
+                name="from_name"
                 placeholder="Your Name"
                 required
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -95,7 +95,7 @@ const Contact = () => {
 
               <input
                 type="email"
-                name="user_email"
+                name="from_email"
                 placeholder="Your Email"
                 required
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -153,4 +153,3 @@ const Contact = () => {
 };
 
 export default Contact;
-           
