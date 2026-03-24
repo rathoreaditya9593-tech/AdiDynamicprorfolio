@@ -5,7 +5,9 @@ import hi from "../assets/hi.png";
 
 const roles = [
   "Frontend Developer",
+  "React.js Developer",
   "MERN Stack Developer",
+  "Node.js Developer",
   "Backend Developer"
 ];
 
