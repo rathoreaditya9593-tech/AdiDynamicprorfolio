@@ -10,31 +10,32 @@ const Footer = () => {
 
   const form = useRef();
 
-  // 🎯 Generate hearts
+  // ❤️ Heart Animation
   const createHearts = () => {
     let newHearts = [];
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 12; i++) {
       newHearts.push({
         id: Date.now() + i,
-        left: Math.random() * 100, // random horizontal
-        delay: Math.random() * 2,
-        size: Math.random() * 20 + 10,
+        left: Math.random() * 100,
+        delay: Math.random() * 1,
+        size: Math.random() * 15 + 10,
       });
     }
 
     setHearts(newHearts);
-
-    // remove after animation
-    setTimeout(() => setHearts([]), 3000);
+    setTimeout(() => setHearts([]), 1000); // faster
   };
 
   const handleLike = () => {
     setShowInput(true);
+    setMessage("");
   };
 
   const sendLike = (e) => {
     e.preventDefault();
+
+    setMessage("Sending... ⏳");
 
     emailjs
       .sendForm(
@@ -43,21 +44,25 @@ const Footer = () => {
         form.current,
         "pWHy204NPE1CHD6QH"
       )
-      .then(() => {
+      .then((res) => {
+        console.log("SUCCESS:", res);
+
         setLiked(true);
         setMessage("Thanks for liking ❤️");
         setShowInput(false);
 
-        createHearts(); // 💥 trigger animation
+        createHearts();
+
+        form.current.reset();
       })
-      .catch(() => {
-        setMessage("Error 😢");
+      .catch((err) => {
+        console.log("ERROR:", err);
+        setMessage("Failed ❌ Try again");
       });
   };
 
   return (
     <footer className="relative bg-gray-900 text-gray-300 pt-14 overflow-hidden">
-      
       {/* ❤️ Heart Rain */}
       {hearts.map((heart) => (
         <FaHeart
@@ -81,23 +86,25 @@ const Footer = () => {
             </h3>
 
             <p className="text-sm text-gray-400">
-            Frontend Developer specialized in building modern, responsive, and user-friendly web applications.
+              Frontend Developer specialized in building modern, responsive, and user-friendly web applications.
             </p>
 
+            {/* Like Button */}
             {!showInput && (
               <button
                 onClick={handleLike}
-                className="flex items-center gap-2 mt-5 text-sm hover:text-white"
+                className="flex items-center gap-2 mt-5 text-sm hover:text-white transition"
               >
                 <FaHeart
                   className={`transition ${
-                    liked ? "text-red-500 scale-125 rotate-12" : ""
+                    liked ? "text-red-500 scale-125 rotate-12" : "text-gray-400"
                   }`}
                 />
                 {liked ? "Liked ❤️" : "Like this portfolio"}
               </button>
             )}
 
+            {/* FORM */}
             {showInput && (
               <form
                 ref={form}
@@ -106,21 +113,28 @@ const Footer = () => {
               >
                 <input
                   type="text"
-                  name="user_name"
+                   name="from_name"
                   placeholder="Your name"
                   required
-                  className="px-2 py-1 text-sm w-36 rounded bg-gray-800 text-white"
+                  className="px-2 py-1 text-sm w-36 rounded bg-gray-800 text-white outline-none"
+                />
+
+                <input
+                  type="hidden"
+                  name="title"
+                  value="Portfolio Like"
                 />
 
                 <button
                   type="submit"
-                  className="bg-blue-600 px-2 py-1 text-sm rounded text-white"
+                  className="bg-blue-600 hover:bg-blue-700 px-2 py-1 text-sm rounded text-white"
                 >
                   OK
                 </button>
               </form>
             )}
 
+            {/* Message */}
             {message && (
               <p className="text-sm text-green-400 mt-3">{message}</p>
             )}
@@ -140,12 +154,13 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Bottom */}
         <div className="py-6 text-center text-sm text-gray-500">
           © {new Date().getFullYear()} Aditya
         </div>
       </div>
 
-      {/* 🎯 Animation CSS */}
+      {/* Animation */}
       <style>
         {`
         @keyframes fall {
@@ -154,13 +169,13 @@ const Footer = () => {
             opacity: 1;
           }
           100% {
-            transform: translateY(300px) rotate(360deg);
+            transform: translateY(200px) rotate(360deg);
             opacity: 0;
           }
         }
 
         .animate-fall {
-          animation: fall 3s linear forwards;
+          animation: fall 1.5s linear forwards;
         }
         `}
       </style>
